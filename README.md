@@ -77,7 +77,7 @@ import (
 )
 
 gSvcAct := &gserviceaccount.GServiceAccount{
-    // private fields
+    // sensitive info
 }
 
 signer, err := gSvcAct.Signer()
