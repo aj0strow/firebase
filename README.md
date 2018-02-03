@@ -51,7 +51,7 @@ func main() {
     
     // Query and parse data.
     var userIds map[string]interface{}
-    err = admin.Query(newbie, &firebase.Params{Shallow: true}, &userIds)
+    err = admin.Query(users, &firebase.Params{Shallow: true}, &userIds)
     
     // Remove data at paths.
     err = admin.Remove(me)
