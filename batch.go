@@ -10,16 +10,19 @@ func NewBatch() *Batch {
 	return &Batch{}
 }
 
+// Batch is used to build a UpdateByMerge request.
 type Batch struct {
 	keys   []Reference
 	values []interface{}
 }
 
+// Set specifies one path to set a value as part of the deep merge.
 func (b *Batch) Set(key Reference, value interface{}) {
 	b.keys = append(b.keys, key)
 	b.values = append(b.values, value)
 }
 
+// Merge combines the reference path and value pairs into a deep map.
 func (b *Batch) Merge() (interface{}, error) {
 	out := map[string]interface{}{}
 	for i := range b.keys {

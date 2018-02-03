@@ -5,6 +5,7 @@ import (
 	"time"
 )
 
+// App keeps track of settings to initialize clients.
 type App struct {
 	DatabaseURL string
 	Secret      string
@@ -12,6 +13,7 @@ type App struct {
 	Transport   http.RoundTripper
 }
 
+// Auth initializes a new client with the passed in auth.
 func (app *App) Auth(auth string) *Client {
 	return &Client{
 		client: &http.Client{
@@ -23,6 +25,7 @@ func (app *App) Auth(auth string) *Client {
 	}
 }
 
+// Admin initalizes a new client with the secret key.
 func (app *App) Admin() *Client {
 	return app.Auth(app.Secret)
 }

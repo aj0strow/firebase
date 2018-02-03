@@ -13,12 +13,14 @@ import (
 var ErrEmptyPath = errors.New("firebase: reference has empty path segment")
 var ErrInvalidDatabaseURL = errors.New("firebase: invalid database URL")
 
+// Client interfaces with one Database URL and one auth context.
 type Client struct {
 	client      *http.Client
 	databaseURL string
 	auth        string
 }
 
+// Params are type safe Firebase Query Parameters in the REST API.
 type Params struct {
 	OrderBy      string
 	EqualTo      string
@@ -29,6 +31,7 @@ type Params struct {
 	Shallow      bool
 }
 
+// Query fetches and parses JSON data at the reference path.
 func (c *Client) Query(ref Reference, params *Params, v interface{}) error {
 	url, err := c.loc(ref, params)
 	if err != nil {
@@ -46,6 +49,7 @@ func (c *Client) Query(ref Reference, params *Params, v interface{}) error {
 	return json.NewDecoder(w.Body).Decode(v)
 }
 
+// Write encodes and overwrites JSON data at the reference path.
 func (c *Client) Write(ref Reference, v interface{}) error {
 	body, err := json.Marshal(v)
 	if err != nil {
@@ -69,6 +73,7 @@ func (c *Client) Write(ref Reference, v interface{}) error {
 	return nil
 }
 
+// UpdateByMerge encodes and deep merges JSON data at the root path.
 func (c *Client) UpdateByMerge(batch *Batch) error {
 	update, err := batch.Merge()
 	if err != nil {
@@ -96,6 +101,7 @@ func (c *Client) UpdateByMerge(batch *Batch) error {
 	return nil
 }
 
+// Remove deletes data at the reference path.
 func (c *Client) Remove(ref Reference) error {
 	url, err := c.loc(ref, nil)
 	if err != nil {
@@ -125,7 +131,7 @@ func (c *Client) loc(ref Reference, params *Params) (string, error) {
 	if err != nil {
 		return "", ErrInvalidDatabaseURL
 	}
-	rel, err := url.Parse(ref.Join() + ".json")
+	rel, err := url.Parse(ref.String() + ".json")
 	if err != nil {
 		return "", err
 	}

@@ -6,14 +6,14 @@ import (
 
 func TestReference(t *testing.T) {
 	root := Reference{}
-	if root.Join() != "/" {
+	if root.String() != "/" {
 		t.Errorf("root reference broken")
 	}
 	users := root.Child("users")
-	if users.Join() != "/users" {
+	if users.String() != "/users" {
 		t.Errorf("child path broken")
 	}
-	if users.Parent().Join() != root.Join() {
+	if users.Parent().String() != root.String() {
 		t.Errorf("parent path is unexpected")
 	}
 	newbie := users.Push()
